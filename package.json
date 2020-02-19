@@ -31,7 +31,7 @@
     "heroku-postbuild": "npm run client:init && npm run client:build"
   },
   "devDependencies": {
-    "codecov": "^3.2.0",
+    "codecov": "^3.6.5",
     "concurrently": "^4.1.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
