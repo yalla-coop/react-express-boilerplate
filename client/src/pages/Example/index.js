@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from '@emotion/styled';
+
+import { Col, Row } from './../../components/Grid';
 
 import Header from './../../components/Header';
 import './page.css';
+
+const H2 = styled.h2`
+  color: ${({ theme }) => theme.colors.pink};
+`;
 
 const Example = ({ user, onLogin, onLogout, onCreateAccount }) => (
   <article>
@@ -12,9 +19,38 @@ const Example = ({ user, onLogin, onLogout, onCreateAccount }) => (
       onLogout={onLogout}
       onCreateAccount={onCreateAccount}
     />
+    <Row inner jc="center">
+      <Col w={['2', '6', '12']}>
+        <p
+          style={{
+            background: 'black',
+          }}
+        >
+          COl 1
+        </p>
+      </Col>
+      <Col w={['2', '6', '12']}>
+        <p
+          style={{
+            background: 'black',
+          }}
+        >
+          COl 2
+        </p>
+      </Col>
+      <Col w={['2', '6', '12']}>
+        <p
+          style={{
+            background: 'black',
+          }}
+        >
+          COl 3
+        </p>
+      </Col>
+    </Row>
 
     <section>
-      <h2>Pages in Storybook</h2>
+      <H2>Pages in Storybook</H2>
       <p>
         We recommend building UIs with a{' '}
         <a

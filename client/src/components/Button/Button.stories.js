@@ -16,7 +16,6 @@ export const Primary = Template.bind({});
 Primary.args = {
   primary: true,
   label: 'Button',
-  text2: '222',
 };
 
 export const Secondary = Template.bind({});
@@ -33,5 +32,11 @@ Large.args = {
 export const Small = Template.bind({});
 Small.args = {
   size: 'small',
+  label: 'Button',
+};
+
+export const Mid = Template.bind({});
+Mid.args = {
+  size: 'mid',
   label: 'Button',
 };
