@@ -1,26 +1,19 @@
 language: node_js
 
-node_js:
-  - 'stable'
-
+node_js: 
+  - 12
 cache:
   directories:
     - node_modules
 
-install:
-  - npm install
-  - npm run client:init
+services:
+  - postgresql
 
 before_script:
-  - npm run build
-  - npm run client:build
-  - sleep 15
+  - psql -c "CREATE DATABASE testing_db;" -U postgres
 
 script:
-  - npm test
-
-on:
-  branch: master
-
-after_success:
-  - npm run coverage
+  - npm run cover
+  - npm run report-coverage
+  
+  

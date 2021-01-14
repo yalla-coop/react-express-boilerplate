@@ -1,49 +1,82 @@
-// test comment
-const createError = require("http-errors");
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
-const logger = require("morgan");
-const router = require("./router");
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import favicon from 'serve-favicon';
+import logger from 'morgan';
+import Debug from 'debug';
+import helmet from 'helmet';
+import Boom from '@hapi/boom';
+
+import { Sentry } from './services/error-handler';
+
+import router from './api';
+import config from './config';
+import * as constants from './constants';
+import { requireHTTPS } from './api/middlewares';
+
+const { PRODUCTION } = constants.envTypes;
+
+// eslint-disable-next-line no-unused-vars
+const debug = Debug('server');
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(logger("dev"));
+// TODO:SETUP SENTRY SETUP
+app.use(Sentry.Handlers.requestHandler());
+app.use(logger('dev'));
+
+if (config.common.env === PRODUCTION) {
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+      dnsPrefetchControl: { allow: true },
+      referrerPolicy: { policy: 'strict-origin' },
+    }),
+  );
+  app.use(requireHTTPS);
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/api", router);
+app.use('/api', router);
 
-if (process.env.NODE_ENV === "production") {
-  // serve any static files
-  app.use(express.static(path.join(__dirname, "../client/build")));
+if (config.common.env === PRODUCTION) {
+  app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
+  app.use(favicon(path.join(__dirname, '..', 'client', 'build', 'tempo.png')));
 
-  // Handle React routing, resturn all requests to React app
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
   });
 }
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
+app.use(
+  Sentry.Handlers.errorHandler({
+    shouldHandleError(error) {
+      // ignore non server errors
+      if (error.output && error.output.statusCode < 500) {
+        return false;
+      }
+      return true;
+    },
+  }),
+);
+
+app.use((err, _, res, next) => {
+  if (Boom.isBoom(err)) {
+    const { statusCode, payload } = err.output;
+
+    return res.status(statusCode).json({
+      ...payload,
+      ...err.data,
+    });
+  }
+
+  const error = Boom.badImplementation(err.message);
+  res.status(500).json(error);
+
+  return next(err);
 });
 
-// error handler
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
-});
-
-module.exports = app;
+export default app;

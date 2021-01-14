@@ -1,21 +1,19 @@
-import React, { Component } from "react";
+import './App.css';
+import Example from './pages/Example';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import { BrowserRouter as Router } from "react-router-dom";
-
-import "./App.css";
-
-import Routes from "./Components/";
-
-class App extends Component {
-  render() {
-    return (
+function App() {
+  return (
+    <div className="app">
       <Router>
-        <div className="App">
-          <Routes />
-        </div>
+        <Switch>
+          <Route path="/">
+            <Example />
+          </Route>
+        </Switch>
       </Router>
-    );
-  }
+    </div>
+  );
 }
 
 export default App;
