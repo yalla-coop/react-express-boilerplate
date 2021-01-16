@@ -95,6 +95,9 @@ Example.propTypes = {
 
 Example.defaultProps = {
   user: null,
+  onLogout: () => {},
+  onLogin: () => {},
+  onCreateAccount: () => {},
 };
 
 export default Example;

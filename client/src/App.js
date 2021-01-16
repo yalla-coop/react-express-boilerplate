@@ -23,9 +23,12 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <Switch>
-            <Route path="/" isLoggedIn={isLoggedIn} isMounted={isMounted}>
-              <Example />
-            </Route>
+            <Route
+              path="/"
+              isLoggedIn={isLoggedIn}
+              isMounted={isMounted}
+              Component={() => <Example onLogin={() => {}} />}
+            />
           </Switch>
         </Router>
       </ThemeProvider>

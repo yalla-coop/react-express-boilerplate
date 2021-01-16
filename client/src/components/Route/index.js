@@ -15,7 +15,7 @@ const Route = (props) => {
     path,
     isLoggedIn,
     role,
-    children,
+    Component,
     exact,
     allowedRoles,
   } = props;
@@ -30,7 +30,7 @@ const Route = (props) => {
         <Layout layout={layout} {...props}>
           <RouterRoute path={path} props exact={exact}>
             {authorized ? (
-              <children {...props} />
+              <Component {...props} />
             ) : (
               <Redirect to={navRoutes.UNAUTHORIZED} {...props} />
             )}
@@ -44,7 +44,7 @@ const Route = (props) => {
   return (
     <Layout layout={layout} {...props}>
       <RouterRoute path={path} props exact={exact}>
-        <children {...props} />
+        <Component {...props} />
       </RouterRoute>
     </Layout>
   );
