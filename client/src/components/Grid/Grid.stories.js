@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col } from '.';
 
 export default {
-  title: 'Grid',
+  title: 'Common Components/Grid',
   component: Row,
   argTypes: {
     w: { control: 'array', defaultValue: [2, 12, 12] },
