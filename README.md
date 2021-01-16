@@ -18,8 +18,8 @@ on the root add .env including this
   TOKEN_MAX_AGE = 2592000000
 
   # database
-  DATABASE_URL = postgres://<user_name>:123456@localhost:5432/<db_name>
-  DATABASE_URL_TEST = postgres://<user_name>:123456@localhost:5432/<db_name>
+  DATABASE_URL = postgres://<user_name>:<password>@localhost:5432/<db_name>
+  DATABASE_URL_TEST = postgres://<user_name>:<password>@localhost:5432/<db_name>
 ```
 
 ## Local DB setup
